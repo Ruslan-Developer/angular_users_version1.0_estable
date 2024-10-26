@@ -10,6 +10,7 @@ import { Injectable } from '@angular/core';
 export class UserService {
 
   private users: User[] = [];
+  private urlBackend: string = 'http://localhost:8080/api/users';
 
   constructor(private http: HttpClient) { }
 
@@ -24,8 +25,17 @@ export class UserService {
    */
 
   findAll(): Observable<User[]> {
-    return this.http.get('http://localhost:8080/api/users').pipe(
+    return this.http.get(this.urlBackend).pipe(
       map((users:any) => users as User[]),
     );
+  }
+  /**
+   * Metodo que hace una solicitud GET a la URL 'http://localhost:8080/api/users/{id}'
+   * para obtener un usuario especifico por id.
+   * @param id pasamos el id del usuario que queremos buscar en la base de datos
+   * @returns Devuelve un Observable que emite un objeto User con el id pasado como parámetro.
+   */
+  findById(id: number): Observable<User> {
+    return this.http.get<User>(this.urlBackend + '/' + id);
   }
 }
