@@ -46,6 +46,13 @@ export class UserAppComponent implements OnInit {
     })  
   }
 
+  /**
+   * Método que permite agregar un nuevo usuario o editar un usuario existente en la vista de usuarios.
+   * Todo esto se hace a través de un formulario que se encuentra en la vista de usuarios.
+   * Dependiendo de si el usuario tiene un id mayor a 0, se edita el usuario, de lo contrario se agrega un nuevo usuario.
+   * Todo esto se comprueba con el servidor de backend mediante una suscripción a la respuesta del servidor, peticiones asincronas.
+   */
+
   addUser() {
     /**
      * Nos suscribimos al evento newUserEventEmitter que emite un evento cada vez que se agrega un nuevo usuario
@@ -53,19 +60,32 @@ export class UserAppComponent implements OnInit {
      */
     this.sharingData.newUserEventEmitter.subscribe(user => {
       if(user.id > 0) {
-        this.users = this.users.map(u => 
-          {
-           if(u.id == user.id) { // Si el id del usuario es igual al id del usuario a editar
-            return {...user}; // Devolvemos el objeto User como clon editado
-          }
-          return u;
+    
+        //1º Actualizamos el usuario en la base de datos, nos suscribimos a la respuesta del servidor y
+        //esperamos que el servidor haya actualizado el usuario en la base de datos
+        this.service.update(user).subscribe(userUpdate => {
+          this.users = this.users.map(u => 
+            {
+              //2º Actualizamos el usuario en la lista de usuarios de Angular.
+             if(u.id == userUpdate.id) {
+              return {...userUpdate}; 
+            }
+            return u;
+          })
+
         })
+     
         
       } else {
-        this.users = [... this.users, { ...user, id: new Date().getTime() }];
+        // Se crea un nuevo usuario en la base de datos, nos suscribimos a la respuesta del servidor y esperamos que el servidor haya creado el usuario en la base de datos
+        // y nos devuelva el usuario creado que se almacena en la variable userNew y se agrega a la lista de usuarios de Angular.
+        this.service.create(user).subscribe(userNew => {
+          this.users = [... this.users, { ...userNew }];
+        })
+        
       }
       // Le pasamos la lista de usuarios actualizada a la vista de usuarios
-      this.router.navigate(["/users"], {state: {users: this.users}});
+      this.router.navigate(['/users'], {state: {users: this.users}});
   
       Swal.fire({
         title: "Agregado!",
