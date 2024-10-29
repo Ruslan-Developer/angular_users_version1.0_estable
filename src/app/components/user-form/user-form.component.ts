@@ -33,7 +33,7 @@ export class UserFormComponent implements OnInit {
      * 1º Suscribirse al evento selectedUserEventEmitter que emite un evento cada vez que se selecciona un usuario.
      */
         
-    //this.sharingData.selectedUserEventEmitter.subscribe(user => this.user = user);
+    this.sharingData.selectedUserEventEmitter.subscribe(user => this.user = user);
 
    
     this.route.paramMap.subscribe(params => {
@@ -47,11 +47,11 @@ export class UserFormComponent implements OnInit {
          * hace la solicitud a la base de datos cuando esta se completa emite el usuario encontrado.
          * La función callback de subscribe recibe el usuario encontrado y lo asigna a la propiedad user.
         */
-        this.service.findById(id).subscribe(user => this.user = user);
+       // this.service.findById(id).subscribe(user => this.user = user);
         /* 2º Emisión del evento: findUserByIdEventEmitter que emite el id del usuario a editar.
          lo emitimos de vuelta al servicio SharingDataService para que lo reciba el componente UserAppComponent. */
      
-       // this.sharingData.findUserByIdEventEmitter.emit(id); 
+        this.sharingData.findUserByIdEventEmitter.emit(id); 
       }
     })
   }

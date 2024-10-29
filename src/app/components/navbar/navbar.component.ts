@@ -11,6 +11,6 @@ import { User } from '../../models/user';
 })
 export class NavbarComponent {
 
-  @Input() users: User[] = []; // Recibimos los usuarios como un input en el componente navbar para poder mostrarlos en la vista
+
 
 }

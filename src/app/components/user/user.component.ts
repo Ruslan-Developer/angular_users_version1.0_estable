@@ -1,4 +1,4 @@
-import { Component, EventEmitter} from '@angular/core';
+import { Component, EventEmitter, OnInit} from '@angular/core';
 import { User } from '../../models/user';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
@@ -10,7 +10,7 @@ import { SharingDataService } from '../../services/sharing-data.service';
   imports: [RouterModule], // Importamos el módulo RouterModule para poder utilizar el routerLink el template de html
   templateUrl: './user.component.html'
 })
-export class UserComponent {
+export class UserComponent implements OnInit {
 
  
   title: string = 'Listado de usuarios!';
@@ -18,18 +18,21 @@ export class UserComponent {
   users: User[] = []; 
 
   constructor(
-    private service: UserService,
-    private sharingData: SharingDataService,
-    private router: Router) {
-      if(this.router.getCurrentNavigation()?.extras.state){
-         // Obtenemos los usuarios que se pasaron por el estado de la navegación
-        this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
-      }else{
-        //Despues se va emitir de la base de datos
-        this.service.findAll().subscribe(users => this.users = users);
-      }
-      
-   }
+    private service: UserService, // Inyectamos el servicio UserService
+    private sharingData: SharingDataService, // Inyectamos el servicio SharingDataService
+    private router: Router) {  }
+   /**
+    * Cada vez que se inicia el componente ejecutamos el método findAll() del servicio UserService
+    * para obtener todos los usuarios de la base de datos.
+    */
+  ngOnInit(): void {
+    /**
+     * users => this.users = users: Esta es la función de callback que se ejecuta cuando el Observable emite un valor. 
+     * En este caso, el valor emitido es un array de objetos User.
+     */
+    
+    this.service.findAll().subscribe(users => this.users = users);
+  }
 
 
  /**
@@ -44,7 +47,7 @@ export class UserComponent {
 
   onSelectedUser(user: User): void {
    // this.sharingData.selectdUserEventEmitter.emit(user);
-   //Obtenemos el usuario seleccionado y lo pasamos por el estado de la navegación para poderlo recuperar en el componente UserFormComponent
-    this.router.navigate(['/users/edit', user.id], {state: {user}});
+   
+    this.router.navigate(['/users/edit', user.id]);
   }
 }

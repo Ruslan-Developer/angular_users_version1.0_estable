@@ -85,7 +85,7 @@ export class UserAppComponent implements OnInit {
         
       }
       // Le pasamos la lista de usuarios actualizada a la vista de usuarios
-      this.router.navigate(['/users'], {state: {users: this.users}});
+      this.router.navigate(['/users']);
   
       Swal.fire({
         title: "Agregado!",
@@ -122,20 +122,29 @@ export class UserAppComponent implements OnInit {
         }
       }).then((result) => {
         if (result.isConfirmed) {
-      /**
-       * Filtramos el usuario que se va a eliminar, para que no se muestre en la tabla de usuarios
-       * que se muestra en la vista de usuarios 
-       */
-      this.users = this.users.filter(user => user.id !== id);
-      /**
-       * Para que se actualice la tabla de usuarios dentro de la vista de usuarios,
-       * tenemps que navegar a la misma ruta, pero con un objeto que contenga la lista de usuarios
-       * actual para que se muestre la tabla de usuarios actualizada en la vista de usuarios
-       * Es decir navegamos a la misma ruta, pero con un objeto que contenga la lista de usuarios actual.
-       */
-      this.router.navigate(["/users/create"], {skipLocationChange: true}).then(() => {
-        this.router.navigate(["/users"], {state: {users: this.users}});
-      })
+          /**
+           * Eliminamos el usuario de la base de datos, nos suscribimos a la respuesta del servidor y
+           * esperamos que el servidor haya eliminado el usuario de la base de datos para después 
+           * eliminarlo de la lista de usuarios de Angular.
+           */
+          this.service.remove(id).subscribe(() => {
+            /**
+             * Filtramos el usuario que se va a eliminar, para que no se muestre en la tabla de usuarios
+             * que se muestra en la vista de usuarios 
+             */
+            this.users = this.users.filter(user => user.id !== id);
+            /**
+             * Para que se actualice la tabla de usuarios dentro de la vista de usuarios,
+             * tenemps que navegar a la misma ruta, pero con un objeto que contenga la lista de usuarios
+             * actual para que se muestre la tabla de usuarios actualizada en la vista de usuarios
+             * Es decir navegamos a la misma ruta, pero con un objeto que contenga la lista de usuarios actual.
+             */
+            this.router.navigate(["/users/create"], {skipLocationChange: true}).then(() => {
+              this.router.navigate(["/users"]);
+              })
+
+          });
+      
 
           swalWithBootstrapButtons.fire({
             title: "Borrado!",
