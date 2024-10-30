@@ -20,7 +20,21 @@ export class UserComponent implements OnInit {
   constructor(
     private service: UserService, // Inyectamos el servicio UserService
     private sharingData: SharingDataService, // Inyectamos el servicio SharingDataService
-    private router: Router) {  }
+    private router: Router) { 
+
+      /**
+       * Permite que el componente reciba y utilice datos pasados a través de la navegación desde otro componente como UserAppComponent.
+       * En este caso, el componente UserAppComponent pasa un array de objetos User a través de la navegación.
+       * Para acceder a estos datos, se utiliza el método getCurrentNavigation() del router.
+       * Si el array de objetos User existe, se asigna a la variable users del componente UserComponent.
+       * De lo contrario, si el es null o undefined, se ejecuta la consulta findAll() del servicio UserService,
+       * es decir se obtienen todos los usuarios de la base de datos.
+       *! Esto nos ayuda a evitar hacer consultas innecesarias a la base de datos y optimizar el rendimiento de la aplicación.
+       */
+      if(this.router.getCurrentNavigation()?.extras.state){
+        this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
+      }
+     }
    /**
     * Cada vez que se inicia el componente ejecutamos el método findAll() del servicio UserService
     * para obtener todos los usuarios de la base de datos.
@@ -30,8 +44,13 @@ export class UserComponent implements OnInit {
      * users => this.users = users: Esta es la función de callback que se ejecuta cuando el Observable emite un valor. 
      * En este caso, el valor emitido es un array de objetos User.
      */
+    if(this.users == undefined || this.users == null || this.users.length == 0){
+      console.log('consulta findAll()');
+      this.service.findAll().subscribe(users => this.users = users);
+
+    }
     
-    this.service.findAll().subscribe(users => this.users = users);
+    
   }
 
 

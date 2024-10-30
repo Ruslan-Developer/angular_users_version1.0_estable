@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
+import { state } from '@angular/animations';
 
 @Component({
   selector: 'user-app',
@@ -68,10 +69,15 @@ export class UserAppComponent implements OnInit {
             {
               //2º Actualizamos el usuario en la lista de usuarios de Angular.
              if(u.id == userUpdate.id) {
-              return {...userUpdate}; 
+              return {...userUpdate};
+            
+
             }
             return u;
+            
           })
+          //Actualiza la vista de usuarios en Angular despues de actualizar el usuario en la base de datos
+          this.router.navigate(['/users'], {state: {users: this.users}});
 
         })
      
@@ -80,12 +86,16 @@ export class UserAppComponent implements OnInit {
         // Se crea un nuevo usuario en la base de datos, nos suscribimos a la respuesta del servidor y esperamos que el servidor haya creado el usuario en la base de datos
         // y nos devuelva el usuario creado que se almacena en la variable userNew y se agrega a la lista de usuarios de Angular.
         this.service.create(user).subscribe(userNew => {
+          console.log(user);
+          // Actualiza el estado de la lista de usuarios de Angular
           this.users = [... this.users, { ...userNew }];
+
+           // Después le pasamos la lista de usuarios actualizada a la vista de Angular y para ello lo redirigimos a UserComponent
+          this.router.navigate(['/users'], {state: {users: this.users}});
         })
         
       }
-      // Le pasamos la lista de usuarios actualizada a la vista de usuarios
-      this.router.navigate(['/users']);
+     
   
       Swal.fire({
         title: "Agregado!",
@@ -135,12 +145,13 @@ export class UserAppComponent implements OnInit {
             this.users = this.users.filter(user => user.id !== id);
             /**
              * Para que se actualice la tabla de usuarios dentro de la vista de usuarios,
-             * tenemps que navegar a la misma ruta, pero con un objeto que contenga la lista de usuarios
+             * tenemos que navegar a la misma ruta, pero con un objeto que contenga la lista de usuarios
              * actual para que se muestre la tabla de usuarios actualizada en la vista de usuarios
              * Es decir navegamos a la misma ruta, pero con un objeto que contenga la lista de usuarios actual.
              */
             this.router.navigate(["/users/create"], {skipLocationChange: true}).then(() => {
-              this.router.navigate(["/users"]);
+              
+              this.router.navigate(['/users'], {state: {users: this.users}});
               })
 
           });
