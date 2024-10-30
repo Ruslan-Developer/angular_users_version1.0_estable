@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
 export class UserFormComponent implements OnInit {
 
   user: User;
-
+  errors: any = {}; // Objeto vacio que almacena los errores de validación del formulario
 
   // Inyectamos al constructor el servicio SharingDataService para poder emitir eventos de usuario nuevo 
   constructor(
@@ -27,6 +27,12 @@ export class UserFormComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    /**
+     * Recepción del evento de errores de validación del formulario al estar suscrito a EventEmitters de SharingDataService.
+     * Cuando ocurre el error lo asigna al objeto errors.
+     *  */ 
+    this.sharingData.errosUserFormEventEmitter.subscribe(errors => this.errors = errors);
+
     /**
      * Forma de trabajar con eventos personalizados en Angular sin  hacer solicitudes HTTP a un servidor remoto.
      * Recepción del evento al estar suscrito a EventEmitters de SharingDataService.
@@ -57,12 +63,12 @@ export class UserFormComponent implements OnInit {
   }
 
   onSubmit(userForm: NgForm): void {
-    if (userForm.valid) {
+   // if (userForm.valid) {
       this.sharingData.newUserEventEmitter.emit(this.user);
       console.log(this.user);
-    }
-    userForm.reset();
-    userForm.resetForm();
+//    }
+//    userForm.reset();
+//    userForm.resetForm();
   }
 
   onClear(userForm: NgForm): void {

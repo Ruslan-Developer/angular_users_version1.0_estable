@@ -64,12 +64,15 @@ export class UserAppComponent implements OnInit {
     
         //1º Actualizamos el usuario en la base de datos, nos suscribimos a la respuesta del servidor y
         //esperamos que el servidor haya actualizado el usuario en la base de datos
-        this.service.update(user).subscribe(userUpdate => {
+        this.service.update(user).subscribe(
+          {
+            //Next envuelve un objeto con la respuesta del servidor que contiene el usuario actualizado
+            next: (userUpdate) => {
           this.users = this.users.map(u => 
             {
               //2º Actualizamos el usuario en la lista de usuarios de Angular.
              if(u.id == userUpdate.id) {
-              return {...userUpdate};
+              return {...userUpdate}; 
             
 
             }
@@ -79,29 +82,55 @@ export class UserAppComponent implements OnInit {
           //Actualiza la vista de usuarios en Angular despues de actualizar el usuario en la base de datos
           this.router.navigate(['/users'], {state: {users: this.users}});
 
+          Swal.fire({
+            title: "Actualizado!",
+            text: "Usuario editado con éxito!",
+            icon: "success"
+          });
+
+          }, error: (err) => {
+              //console.log(err.error);
+              //Emitimos el error al formulario de usuario gracias al service SharingDataService y lo recibimos en el componente UserFormComponent en el ngOnInit
+              if(err.status === 400) {
+              this.sharingData.errosUserFormEventEmitter.emit(err.error);
+              }
+          }
         })
+
      
         
       } else {
         // Se crea un nuevo usuario en la base de datos, nos suscribimos a la respuesta del servidor y esperamos que el servidor haya creado el usuario en la base de datos
         // y nos devuelva el usuario creado que se almacena en la variable userNew y se agrega a la lista de usuarios de Angular.
-        this.service.create(user).subscribe(userNew => {
+        this.service.create(user).subscribe( {
+          // Next envuelve un objeto con la respuesta del servidor que contiene el usuario creado para validar si se ha creado correctamente
+          next: userNew => {
           console.log(user);
           // Actualiza el estado de la lista de usuarios de Angular
           this.users = [... this.users, { ...userNew }];
 
            // Después le pasamos la lista de usuarios actualizada a la vista de Angular y para ello lo redirigimos a UserComponent
           this.router.navigate(['/users'], {state: {users: this.users}});
-        })
+
+          Swal.fire({
+            title: "Agregado nuevo usuario!",
+            text: "Usuario guardado con éxito!",
+            icon: "success"
+          });
+        },
+        error: (err) => {
+          //console.log(err.error);
+          if(err.status === 400) {
+            this.sharingData.errosUserFormEventEmitter.emit(err.error);
+          }
+          
+
+        }})
         
       }
      
   
-      Swal.fire({
-        title: "Agregado!",
-        text: "Usuario guardado con éxito!",
-        icon: "success"
-      });
+      
 
      
     
