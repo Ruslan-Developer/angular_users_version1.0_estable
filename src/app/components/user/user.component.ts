@@ -3,6 +3,7 @@ import { User } from '../../models/user';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'user',
@@ -20,6 +21,7 @@ export class UserComponent implements OnInit {
   constructor(
     private service: UserService, // Inyectamos el servicio UserService
     private sharingData: SharingDataService, // Inyectamos el servicio SharingDataService
+    private authService: AuthService, // Inyectamos el servicio AuthService
     private router: Router) { 
 
       /**
@@ -68,5 +70,13 @@ export class UserComponent implements OnInit {
    // this.sharingData.selectdUserEventEmitter.emit(user);
    
     this.router.navigate(['/users/edit', user.id]);
+  }
+
+  /**
+   * Método que nos va permitir ocultar o mostrar botones o elementos de la vista de usuarios UserComponent.html
+   * dependiendo de si el usuario es administrador o no. 
+   */
+  get admin() {
+    return this.authService.isAdmin();
   }
 }

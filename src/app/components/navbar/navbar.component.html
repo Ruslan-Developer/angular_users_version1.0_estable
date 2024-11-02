@@ -12,9 +12,13 @@
                aria-current="page" [routerLink]="['/users']" 
                [state] ="{users}">Usuarios</a>
           </li>
-          <li class="nav-item">
-            <a class="nav-link" [routerLink]="['/users/create']">Nuevo Usuario</a>
-          </li>
+          @if(admin){
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/users/create']">Nuevo Usuario</a>
+            </li>
+
+          }
+         
            <li class="nav-item">
             <a class="nav-link" href="#">Carro compra</a>
           </li>
@@ -25,8 +29,14 @@
       </div>
       <div class="collapse navbar-collapse justify-content-end" id="navbarNavAuth">
         <span class="nav-item nav-link text-primary mx-3">
-        <a class="btn btn-outline-primary" style="color: #20c030; font-weight: bold;" [routerLink]="['/login']">
-          <i class="fas fa-sign-in-alt"></i> Sign in </a>
+          @if(login.isAuth){
+              {{login.user.username}} <!-- NOTA: ver si es user o login -->
+          }@else {
+            <a class="btn btn-outline-primary" style="color: #20c030; font-weight: bold;" [routerLink]="['/login']">
+              <i class="fas fa-sign-in-alt"></i> Sign in </a>
+
+          }
+        
       </span>
 
       </div>
