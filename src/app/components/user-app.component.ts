@@ -6,6 +6,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { state } from '@angular/animations';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'user-app',
@@ -23,7 +24,8 @@ export class UserAppComponent implements OnInit {
 
   constructor(private service: UserService,
     private router: Router,
-    private sharingData: SharingDataService) {
+    private sharingData: SharingDataService,
+    private authService: AuthService) {
    
   }
 
@@ -34,6 +36,34 @@ export class UserAppComponent implements OnInit {
     this.addUser();
     this.removeUser();
     this.findUserById();
+    this.handlerLogin();
+
+  }
+
+  handlerLogin(){
+    //Recibimos los datos que se pasan por el formulario de login
+    this.sharingData.handlerLoginEventEmitter.subscribe(({username, password}) => {
+      console.log(username + " " + password);
+
+      this.authService.loginUser({username, password}).subscribe({
+        next: response => {
+          const token = response.token;
+          console.log(token);
+          //Descodificamos el token con atob y lo parseamos a JSON
+          const payload = JSON.parse(atob(token.split(".")[1]));
+          console.log(payload);
+
+        },
+        error: error => {
+          if(error.status == 401){
+            console.log(error.error);
+            Swal.fire('Error en el login, ', error.error.message, 'error');
+          }else{
+            throw error;
+          }
+        }
+      })
+    })
 
   }
 

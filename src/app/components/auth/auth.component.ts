@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User } from '../../models/user';
 import Swal from 'sweetalert2';
+import { SharingDataService } from '../../services/sharing-data.service';
 
 @Component({
   selector: 'app-auth',
@@ -14,7 +15,7 @@ export class AuthComponent {
 
   user: User;
 
-  constructor(){
+  constructor(private sharingData: SharingDataService) {
     this.user = new User();
   }
 
@@ -27,8 +28,10 @@ export class AuthComponent {
       );
       
     }else{
-      console.log(this.user);
-      this.resetForm();
+      /**
+       * Transmitimos los datos del login al componente padre o principal
+       */
+      this.sharingData.handlerLoginEventEmitter.emit({username: this.user.username, password: this.user.password});
     }
 
   }
