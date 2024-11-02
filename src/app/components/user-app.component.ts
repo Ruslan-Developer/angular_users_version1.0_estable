@@ -51,6 +51,18 @@ export class UserAppComponent implements OnInit {
           console.log(token);
           //Descodificamos el token con atob y lo parseamos a JSON
           const payload = JSON.parse(atob(token.split(".")[1]));
+
+          const user = { username: payload.sub};
+          const login = {
+            user,
+            isAuth: true,
+            isAdmin: payload.isAdmin
+          }
+
+          this.authService.token = token;
+          this.authService.login = login;
+                    
+          this.router.navigate(['/users']);
           console.log(payload);
 
         },

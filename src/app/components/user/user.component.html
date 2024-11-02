@@ -1,6 +1,8 @@
 <h3>{{title}}</h3>
+@if(admin){
+    <button class="btn btn-primary my-3" [routerLink]="['/users/create']">Crear usuario</button>
+}
 
-<button class="btn btn-primary my-3" [routerLink]="['/users/create']">Crear usuario</button>
 
 @if (users.length == 0) {
 <div class="alert alert-warning">No hay registros en el sistema!</div>
@@ -13,8 +15,11 @@
             <th>Apellidos</th>
             <th>Email</th>
             <th>Usuario</th>
-            <th>Eliminar</th>
-            <th>Modificar</th>
+            @if(admin){
+                <th>Eliminar</th>
+                <th>Modificar</th>
+            }
+            
         </tr>
     </thead>
     <tbody>
@@ -25,21 +30,23 @@
             <td> {{user.lastname}} </td>
             <td> {{user.email}} </td>
             <td> {{user.username}} </td>
-            <td>
-                <button class="btn btn-danger btn-sm"
-                (click)="onRemoveUser(user.id)"
-                >
-                    Borrar
-                </button>
-            </td>
-            <td>
-                <button class="btn btn-info btn-sm"
-               [routerLink]="['/users/edit', user.id]">
-                    Editar
-                </button>
-            </td>
-        </tr>
-        }
+            @if(admin){
+                    <td>
+                        <button class="btn btn-danger btn-sm"
+                        (click)="onRemoveUser(user.id)"
+                        >
+                            Borrar
+                        </button>
+                    </td>
+                    <td>
+                        <button class="btn btn-info btn-sm"
+                    [routerLink]="['/users/edit', user.id]">
+                            Editar
+                        </button>
+                    </td>
+                    }
+                </tr>
+            }
     </tbody>
 </table>
 }
