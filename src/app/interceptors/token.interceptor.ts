@@ -3,7 +3,7 @@ import { inject } from '@angular/core';
 import { AuthService } from '../services/auth.service';
 
 /**
- * Intrceptor que se encarga de añadir el token de autenticación a las peticiones HTTP que se realizan al servidor de backend.
+ * Interceptor que asegura que todas las peticiones HTTP que se realizan al servidor de backend contienen el token de autenticación del usuario autenticado en la aplicación web.
  * Esto se hace para que el servidor de backend pueda identificar al usuario que realiza la petición HTTP y pueda devolver la información
  * solicitada al usuario autenticado de forma automaática y segura.
  * @param req Petición HTTP que se va a realizar al servidor de backend

@@ -3,7 +3,7 @@
         <div class="card">
             <div class="card-content">
                 <div class="card-header">
-                <h5 class="card-title">Form {{(user.id > 0)? 'Update': 'Create'}} User</h5>
+                <h5 class="card-title">Formulario {{(user.id > 0)? 'Editar': 'Crear'}} Usuario</h5>
            
             <div class="card-body">
 
@@ -102,14 +102,21 @@
                         </div>
 
                     }
+                    <div class="form-check form-switch my-2">
+                        <input type="checkbox" class="form-check-input" id="adminSwitch" [(ngModel)]="user.admin" name="admin">
+                        <label class="form-check-label" for="adminSwitch">
+                            <i class="fas fa-user-shield" style="color: #20b741;" ></i>
+                            <span class="ms-2 fw-bold" >Admin</span>
+                        </label>
+                      </div>
                     
                     <div>
-                        <button type="submit" class="btn btn-primary m-2" > <!-- [disabled]="userForm.invalid" -->
-                            {{(user.id > 0)? 'Update': 'Create'}}
+                        <button type="submit" class="btn btn-primary my-2 me-2" > <!-- [disabled]="userForm.invalid" -->
+                            {{(user.id > 0)? 'Editar': 'Crear'}}
                         </button>
 
                         <button type="button" class="btn btn-secondary my-2" (click)="onClear(userForm)">
-                            Clear
+                            Limpiar
                         </button>
                     </div>
 
