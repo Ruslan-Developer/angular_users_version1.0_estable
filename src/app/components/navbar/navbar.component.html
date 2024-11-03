@@ -31,8 +31,11 @@
         <span class="nav-item nav-link text-primary mx-3">
           @if(login.isAuth){
               {{login.user.username}} <!-- NOTA: ver si es user o login -->
+              <button
+              (click)="handlerLogout()" class="btn btn-outline-success" style="color: #cd364b; font-weight: bold;">
+              <i class="fas fa-sign-out-alt"></i> Logout</button>
           }@else {
-            <a class="btn btn-outline-primary" style="color: #20c030; font-weight: bold;" [routerLink]="['/login']">
+            <a class="btn btn-outline-primary" style="color: #33c342; font-weight: bold;" [routerLink]="['/login']">
               <i class="fas fa-sign-in-alt"></i> Sign in </a>
 
           }

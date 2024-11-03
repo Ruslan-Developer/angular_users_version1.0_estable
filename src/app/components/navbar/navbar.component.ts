@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
 
@@ -11,7 +11,9 @@ import { AuthService } from '../../services/auth.service';
  
 })
 export class NavbarComponent {
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService,
+    private router: Router
+  ) {}
 
   @Input() users: User[] = [];
   /**
@@ -33,6 +35,11 @@ export class NavbarComponent {
 
   get admin(){
     return this.authService.isAdmin();
+  }
+
+  handlerLogout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
   }
 
 }
