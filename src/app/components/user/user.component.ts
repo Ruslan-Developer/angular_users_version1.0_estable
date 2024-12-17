@@ -1,8 +1,9 @@
-import { Component, EventEmitter} from '@angular/core';
+import { Component, EventEmitter, OnInit} from '@angular/core';
 import { User } from '../../models/user';
 import { Router, RouterModule } from '@angular/router';
 import { UserService } from '../../services/user.service';
 import { SharingDataService } from '../../services/sharing-data.service';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'user',
@@ -10,7 +11,7 @@ import { SharingDataService } from '../../services/sharing-data.service';
   imports: [RouterModule], // Importamos el módulo RouterModule para poder utilizar el routerLink el template de html
   templateUrl: './user.component.html'
 })
-export class UserComponent {
+export class UserComponent implements OnInit {
 
  
   title: string = 'Listado de usuarios!';
@@ -18,18 +19,41 @@ export class UserComponent {
   users: User[] = []; 
 
   constructor(
-    private service: UserService,
-    private sharingData: SharingDataService,
-    private router: Router) {
+    private service: UserService, // Inyectamos el servicio UserService
+    private sharingData: SharingDataService, // Inyectamos el servicio SharingDataService
+    private authService: AuthService, // Inyectamos el servicio AuthService
+    private router: Router) { 
+
+      /**
+       * Permite que el componente reciba y utilice datos pasados a través de la navegación desde otro componente como UserAppComponent.
+       * En este caso, el componente UserAppComponent pasa un array de objetos User a través de la navegación.
+       * Para acceder a estos datos, se utiliza el método getCurrentNavigation() del router.
+       * Si el array de objetos User existe, se asigna a la variable users del componente UserComponent.
+       * De lo contrario, si el es null o undefined, se ejecuta la consulta findAll() del servicio UserService,
+       * es decir se obtienen todos los usuarios de la base de datos.
+       *! Esto nos ayuda a evitar hacer consultas innecesarias a la base de datos y optimizar el rendimiento de la aplicación.
+       */
       if(this.router.getCurrentNavigation()?.extras.state){
-         // Obtenemos los usuarios que se pasaron por el estado de la navegación
         this.users = this.router.getCurrentNavigation()?.extras.state!['users'];
-      }else{
-        //Despues se va emitir de la base de datos
-        this.service.findAll().subscribe(users => this.users = users);
       }
-      
-   }
+     }
+   /**
+    * Cada vez que se inicia el componente ejecutamos el método findAll() del servicio UserService
+    * para obtener todos los usuarios de la base de datos.
+    */
+  ngOnInit(): void {
+    /**
+     * users => this.users = users: Esta es la función de callback que se ejecuta cuando el Observable emite un valor. 
+     * En este caso, el valor emitido es un array de objetos User.
+     */
+    if(this.users == undefined || this.users == null || this.users.length == 0){
+      console.log('consulta findAll()');
+      this.service.findAll().subscribe(users => this.users = users);
+
+    }
+    
+    
+  }
 
 
  /**
@@ -44,7 +68,15 @@ export class UserComponent {
 
   onSelectedUser(user: User): void {
    // this.sharingData.selectdUserEventEmitter.emit(user);
-   //Obtenemos el usuario seleccionado y lo pasamos por el estado de la navegación para poderlo recuperar en el componente UserFormComponent
-    this.router.navigate(['/users/edit', user.id], {state: {user}});
+   
+    this.router.navigate(['/users/edit', user.id]);
+  }
+
+  /**
+   * Método que nos va permitir ocultar o mostrar botones o elementos de la vista de usuarios UserComponent.html
+   * dependiendo de si el usuario es administrador o no. 
+   */
+  get admin() {
+    return this.authService.isAdmin();
   }
 }

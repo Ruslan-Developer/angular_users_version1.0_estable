@@ -1,0 +1,64 @@
+
+<h3>Información del Cliente</h3>
+
+
+@if (client) {
+
+   
+
+    <div class="card my-3" style="width: 100%;">
+
+    <table class="table table-hover" class="table table-striped">
+        <tbody>
+           
+            <tr class="table-primary">
+                <td><strong>#</strong></td>
+                <td>{{client.id}}</td>
+            </tr>
+            <tr  class="table-success">
+                <td><strong>Nombre</strong></td>
+                <td>{{client.name}}</td>
+            </tr>
+            <tr class="table-success">
+                <td><strong>Apellidos</strong></td>
+                <td>{{client.lastName}}</td>
+            </tr>
+            <tr>
+                <td><strong>Email</strong></td>
+                <td>{{client.email}}</td>
+            </tr>
+            <tr>
+                <td><strong>Teléfono</strong></td>
+                <td>{{client.phone}}</td>
+            </tr>
+            <tr>
+                <td><strong>Dirección</strong></td>
+                <td>{{client.address}}</td>
+            </tr>
+            <tr>
+                <td><strong>Ciudad</strong></td>
+                <td>{{client.city}}</td>
+            </tr>
+            <tr>
+                <td><strong>Provincia</strong></td>
+                <td>{{client.province}}</td>
+            </tr>
+            <tr>
+                <td><strong>Código Postal</strong></td>
+                <td>{{client.postalCode}}</td>
+            </tr>
+            <tr>
+                <td><strong>País</strong></td>
+                <td>{{client.country}}</td>
+            </tr>
+            
+        </tbody>
+    </table>
+    <button (click)="downloadPDF()" class="btn btn-primary btn-block">Crear Factura PDF</button>
+
+</div>
+}
+@else {
+<div class="alert alert-warning">No hay clientes que mostrar</div>
+}
+

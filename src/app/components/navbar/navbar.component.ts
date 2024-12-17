@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
+import { AuthService } from '../../services/auth.service';
+import { CartItem } from '../../models/cartitem';
 
 @Component({
   selector: 'navbar',
@@ -11,6 +13,39 @@ import { User } from '../../models/user';
 })
 export class NavbarComponent {
 
-  @Input() users: User[] = []; // Recibimos los usuarios como un input en el componente navbar para poder mostrarlos en la vista
+  @Input() items: CartItem[] = [];
+
+  @Input() total: number = 0;  
+
+  constructor(private authService: AuthService,
+    private router: Router
+  ) {}
+
+  @Input() users: User[] = [];
+  /**
+   * Método que permite acceder a la info sobre el estado de autenticación del usuario, asi
+   * podemos llamar al metodo isAuth() en el template del componente navbar.component.html
+   * y saber si el usuario está autenticado o no en la aplicación web para mostrar u ocultar
+   * los elementos del menú de navegación.
+   * Este metodo devuelve un objeto con toda la información del usuario logueado: 
+   * nombre de usuario, si está autenticado o no y si es administrador o no.
+   */
+  get login(){
+   
+    return this.authService.login; 
+  }
+
+  /**
+   * 
+   */
+
+  get admin(){
+    return this.authService.isAdmin();
+  }
+
+  handlerLogout(){
+    this.authService.logout();
+    this.router.navigate(['/login']);
+  }
 
 }

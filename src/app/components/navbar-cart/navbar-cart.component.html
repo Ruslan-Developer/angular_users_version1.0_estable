@@ -1,0 +1,29 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark navbar-large">
+    <div class="container-fluid">
+        <a class="navbar-brand" style="color: #f2f5f2; font-weight: bold; font-size: 1.8em;" href="#">Catálogo
+            <i class="fas fa-box" style="margin-right: 8px;"></i>  </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                   
+                    <a class="nav-link active" aria-current="page" style="color: #00FFFF;  font-size: 1.2em;" 
+                    [routerLink]="['/catalog']"
+                >Productos <i class="fas fa-box-open" style="margin-right: 8px;"></i></a>
+                </li>
+                <li class="nav-item">
+                    <a 
+                    style="color: #00FF00;  font-size: 1.2em;"
+                    [routerLink]="['/cart']"
+                    [state]="{items, total}"
+                    class="nav-link" 
+                    role="button">Carro Compra  ({{items.length}}) <i class="fas fa-shopping-cart"></i></a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
