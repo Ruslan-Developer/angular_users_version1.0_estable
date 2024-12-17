@@ -1,0 +1,4 @@
+
+.table-row:nth-child(odd) {
+    background-color: #ce2424; /* Color para las filas impares */
+  }

@@ -1,0 +1,44 @@
+<div class="card border-primarym mb-3" style="max-width: 80rem;">
+    
+    <div class="card-body text-primary">
+      <h5 class="card-title">Lista de Clientes</h5>
+    
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Telefono</th>
+                    <th>Dirección</th>
+                    <th>Ciudad</th>
+                    <th>Provincia</th>
+                    <th>Código Postal</th>
+                    <th>País</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @for(client of clients; track $index){
+                <tr>
+                    <td>{{client.id}}</td>
+                    <td>{{client.name}}</td>
+                    <td>{{client.lastName}}</td>
+                    <td>{{client.email}}</td>
+                    <td>{{client.phone}}</td>
+                    <td>{{client.address}}</td>
+                    <td>{{client.city}}</td>
+                    <td>{{client.province}}</td>
+                    <td>{{client.postalCode}}</td>
+                    <td>{{client.country}}</td>
+                </tr>
+            }
+
+            </tbody>
+        </table>
+    </div>
+</div>
+     
+    

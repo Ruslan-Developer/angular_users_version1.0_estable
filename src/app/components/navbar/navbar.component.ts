@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { User } from '../../models/user';
 import { AuthService } from '../../services/auth.service';
+import { CartItem } from '../../models/cartitem';
 
 @Component({
   selector: 'navbar',
@@ -11,6 +12,11 @@ import { AuthService } from '../../services/auth.service';
  
 })
 export class NavbarComponent {
+
+  @Input() items: CartItem[] = [];
+
+  @Input() total: number = 0;  
+
   constructor(private authService: AuthService,
     private router: Router
   ) {}

@@ -7,6 +7,7 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { SharingDataService } from '../services/sharing-data.service';
 import { state } from '@angular/animations';
 import { AuthService } from '../services/auth.service';
+import { CartItem } from '../models/cartitem';
 
 @Component({
   selector: 'user-app',
@@ -20,7 +21,9 @@ export class UserAppComponent implements OnInit {
 
   users: User[] = [];
 
+  items: CartItem[] = [];
 
+  total: number = 0;
 
   constructor(private service: UserService,
     private router: Router,
@@ -33,11 +36,33 @@ export class UserAppComponent implements OnInit {
     
     
     this.service.findAll().subscribe(users => this.users = users);
+    
+    this.sharingData.productEventEmitter.subscribe(product => {
+      const hasItem = this.items.find(item => item.product.id === product.id);
+      if (hasItem) {
+        this.items = this.items.map(item => {
+          if (item.product.id === product.id) {
+            return {
+              ...item,
+              quantity: item.quantity + 1
+            }
+          }
+          return item;
+        })
+      } else {
+        this.items = [... this.items, { product: { ...product }, quantity: 1 }];
+      }
+      this.calculateTotal();
+    })
     this.addUser();
     this.removeUser();
     this.findUserById();
     this.handlerLogin();
 
+  }
+
+  calculateTotal(): void {
+    this.total = this.items.reduce((accumulator, item) => accumulator + item.quantity * item.product.price, 0);
   }
 
   handlerLogin(){

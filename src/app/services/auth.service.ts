@@ -18,8 +18,9 @@ export class AuthService {
   };
 
   constructor(private http: HttpClient) {}
-
+    //Envia una solicitud con las credenciales del usuario para iniciar sesión al servidor
     loginUser({username, password}: any): Observable<any> {
+      //Si la autenticacion es exitosa devuelve  una respuesta que inclutye el token de autenticacion con mas informacion del usuario
       return this.http.post(this.url, {username, password});
     
    }
@@ -44,9 +45,10 @@ export class AuthService {
 
    set token(token: string){
      this._token = token;
+     //Permite que el token que este disponible en la memoria del navegador incluso si el usuario recarga la pagina
      sessionStorage.setItem('token', token);
    }
-
+   //Permite que el token se utilice en diferentes partes de la aplicacion sin tener que volver a iniciar sesion
    get token(){
     if(this._token != undefined){
       return this._token;

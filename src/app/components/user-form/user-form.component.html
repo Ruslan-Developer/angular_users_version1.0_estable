@@ -9,6 +9,22 @@
 
                 <form (ngSubmit)="onSubmit(userForm)" #userForm="ngForm">
 
+                   
+                    <div>
+                        <input placeholder="Lastname" name="lastname" [(ngModel)]="user.lastname" 
+                            class="form-control my-2" #lastname="ngModel"> <!-- required -->
+                        @if(errors?.lastname) {
+                            <div class="text-danger">{{errors.lastname}}</div>
+                        }
+
+                      <!--  @if (lastname.invalid && (lastname.dirty || lastname.touched)) {
+                        @if(lastname.errors!['required']){
+                        <div class="text-danger">
+                            El lastname es requerido
+                        </div>
+                        }
+                        } -->
+                    </div>
                     <div>
                         <input placeholder="Name" name="name" [(ngModel)]="user.name" class="form-control my-2" 
                             #name="ngModel"> <!-- required -->
@@ -26,20 +42,93 @@
                         } -->
                     </div>
                     <div>
-                        <input placeholder="Lastname" name="lastname" [(ngModel)]="user.lastname" 
-                            class="form-control my-2" #lastname="ngModel"> <!-- required -->
-                        @if(errors?.lastname) {
-                            <div class="text-danger">{{errors.lastname}}</div>
+                        <input placeholder="Fecha nacimiento" name="birthday" [(ngModel)]="user.birthday" 
+                            class="form-control my-2" #birthday="ngModel"> <!-- required -->
+                        @if(errors?.birthday) {
+                            <div class="text-danger">{{errors.birthday}}</div>
                         }
-
-                      <!--  @if (lastname.invalid && (lastname.dirty || lastname.touched)) {
-                        @if(lastname.errors!['required']){
+                       <!-- @if (specialty.invalid && (specialty.dirty || specialty.touched)) {
+                        @if(specialty.errors!['required']){
                         <div class="text-danger">
-                            El lastname es requerido
+                            La especialidad es requerida
                         </div>
                         }
                         } -->
                     </div>
+                    <div>
+                        <input placeholder="Género" name="gender" [(ngModel)]="user.gender" class="form-control my-2"
+                            #clinic="ngModel"> <!-- required -->
+                        @if(errors?.gender) {
+                            <div class="text-danger">{{errors.gender}}</div>
+                        }
+                       <!-- @if (clinic.invalid && (clinic.dirty || clinic.touched)) {
+                        @if(clinic.errors!['required']){
+                        <div class="text-danger">
+                            La clínica es requerida
+                        </div>
+                        }
+                        } -->
+                    </div>
+                    
+                    <div>
+                        <input placeholder="País" name="country" [(ngModel)]="user.country" 
+                            class="form-control my-2" #country="ngModel"> <!-- required -->
+                        @if(errors?.country) {
+                            <div class="text-danger">{{errors.country}}</div>
+                        }
+                       <!-- @if (insurance.invalid && (insurance.dirty || insurance.touched)) {
+                        @if(insurance.errors!['required']){
+                        <div class="text-danger">
+                            La aseguradora es requerida
+                        </div>
+                        }
+                        } -->
+                    </div>
+                    <div>
+                        <input placeholder="Municipality" name="municipality" [(ngModel)]="user.municipality" 
+                            class="form-control my-2" #municipality="ngModel"> <!-- required -->
+                        @if(errors?.municipality) {
+                            <div class="text-danger">{{errors.municipality}}</div>
+                        }
+                       <!-- @if (municipality.invalid && (municipality.dirty || municipality.touched)) {
+                        @if(municipality.errors!['required']){
+                        <div class="text-danger">
+                            El municipio es requerido
+                        </div>
+                        }
+                        } -->
+                    </div>
+                    <div>
+                        <input placeholder="Province" name="province" [(ngModel)]="user.province" 
+                            class="form-control my-2" #province="ngModel"> <!-- required -->
+                        @if(errors?.province) {
+                            <div class="text-danger">{{errors.province}}</div>
+                        }
+                       <!-- @if (province.invalid && (province.dirty || province.touched)) {
+                        @if(province.errors!['required']){
+                        <div class="text-danger">
+                            La provincia es requerida
+                        </div>
+                        }
+                        } -->
+                    </div>
+                    <div>
+                        <input placeholder="Phone" name="phone" [(ngModel)]="user.phone" class="form-control my-2"
+                            type="number"  #phone="ngModel" required 
+                            pattern="[0-9]*"> <!-- required -->
+                        @if(errors?.phone) {
+                            <div class="text-danger">{{errors.phone}}</div>
+                        }
+                       <!-- @if (phone.invalid && (phone.dirty || phone.touched)) {
+                        @if(phone.errors!['required']){
+                        <div class="text-danger">
+                            El teléfono es requerido
+                        </div>
+                        }
+                        } -->
+                    </div>
+
+                    
 
                     <div>
                         <input placeholder="Email" name="email" [(ngModel)]="user.email" class="form-control my-2"
@@ -60,7 +149,10 @@
                         }
                         } -->
                     </div>
+            
+                   
                     <div>
+                   
                         <input placeholder="Username" name="username" [(ngModel)]="user.username"
                             class="form-control my-2"  #username="ngModel"> <!-- required minlength="8" -->
                         @if(errors?.username) {
@@ -79,6 +171,7 @@
                         }
                         } -->
                     </div>
+                  
                     @if(user.id == 0){
 
                         <div>
@@ -111,8 +204,8 @@
                       </div>
                     
                     <div>
-                        <button type="submit" class="btn btn-primary my-2 me-2" > <!-- [disabled]="userForm.invalid" -->
-                            {{(user.id > 0)? 'Editar': 'Crear'}}
+                        <button type="submit" class="btn btn-primary my-3 me-3" > <!-- [disabled]="userForm.invalid" -->
+                            {{(user.id > 0)? 'Actualizar': 'Crear'}}
                         </button>
 
                         <button type="button" class="btn btn-secondary my-2" (click)="onClear(userForm)">
